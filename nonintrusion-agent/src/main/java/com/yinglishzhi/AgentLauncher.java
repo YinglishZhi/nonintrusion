@@ -34,7 +34,7 @@ public class AgentLauncher {
             ClassLoader agentClassLoader = loadOrDefineClassLoader(args);
             final Class<?> server = agentClassLoader.loadClass("com.yinglishzhi.SpyCore");
             Object instance = server.getMethod("getInstance", Instrumentation.class).invoke(null, inst);
-            server.getMethod("test").invoke(instance);
+            server.getMethod("invade").invoke(instance);
         } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | MalformedURLException e) {
             e.printStackTrace();
         }

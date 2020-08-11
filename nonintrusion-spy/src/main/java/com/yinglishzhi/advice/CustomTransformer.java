@@ -1,4 +1,4 @@
-package com.yinglishzhi;
+package com.yinglishzhi.advice;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -14,28 +14,28 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 自定义 transformer
+ *
  * @author LDZ
  * @date 2020/8/6 8:13 下午
  */
-public class MyTransformer implements ClassFileTransformer {
+public class CustomTransformer implements ClassFileTransformer {
 
-    final static String prefix = "\nlong startTime = System.currentTimeMillis();\n";
-    final static String postfix = "\nlong endTime = System.currentTimeMillis();\n";
+    /**
+     * 被处理方法列表
+     */
+    private final static Map<String, List<String>> METHOD_MAP = new HashMap<>();
 
-    // 被处理的方法列表
-    final static Map<String, List<String>> methodMap = new HashMap<>();
-
-    public MyTransformer() {
-        System.out.println("transform add...");
+    public CustomTransformer() {
         add("com.yinglishzhi.MyProgram.sayHello");
         add("com.yinglishzhi.MyProgram.sayHello2");
-        System.out.println(methodMap.toString());
+        System.out.println(METHOD_MAP.toString());
     }
 
     private void add(String methodString) {
         String className = methodString.substring(0, methodString.lastIndexOf("."));
         String methodName = methodString.substring(methodString.lastIndexOf(".") + 1);
-        List<String> list = methodMap.computeIfAbsent(className, k -> new ArrayList<>());
+        List<String> list = METHOD_MAP.computeIfAbsent(className, k -> new ArrayList<>());
         list.add(methodName);
     }
 
@@ -44,18 +44,14 @@ public class MyTransformer implements ClassFileTransformer {
                             ProtectionDomain protectionDomain, byte[] classfileBuffer) {
         className = className.replace("/", ".");
         // 判断加载的class的包路径是不是需要监控的类
-        if (methodMap.containsKey(className)) {
+        if (METHOD_MAP.containsKey(className)) {
             try {
-                System.out.println("------------------> " + methodMap.get(className));
-                // 使用全称,用于取得字节码类 <使用javassist>
+                System.out.println("------------------> " + METHOD_MAP.get(className));
                 ClassReader cr = new ClassReader(classfileBuffer);
                 ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-                AdviceWeaver classAdapter = new AdviceWeaver(cw);
+                AdviceWeaver classAdapter = new AdviceWeaver(cw, METHOD_MAP.get(className));
                 cr.accept(classAdapter, ClassReader.EXPAND_FRAMES);
-                for (String methodName : methodMap.get(className)) {
-                    System.out.println("the method name is " + methodName);
-                    printClass(cw.toByteArray());
-                }
+                printClass(cw.toByteArray());
                 return cw.toByteArray();
             } catch (Exception e) {
                 System.out.println(e);
@@ -64,6 +60,11 @@ public class MyTransformer implements ClassFileTransformer {
         return null;
     }
 
+    /**
+     * 打印 class
+     *
+     * @param bytes 字节流
+     */
     private static void printClass(byte[] bytes) {
         File file = new File("/Users/mtdp/util/log/test.class");
         FileOutputStream fout = null;

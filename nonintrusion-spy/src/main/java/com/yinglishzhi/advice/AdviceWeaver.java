@@ -1,4 +1,4 @@
-package com.yinglishzhi;
+package com.yinglishzhi.advice;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -6,7 +6,8 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.JSRInlinerAdapter;
 
-;
+import java.util.List;
+
 
 /**
  * class visitor
@@ -16,16 +17,12 @@ import org.objectweb.asm.commons.JSRInlinerAdapter;
  */
 public class AdviceWeaver extends ClassVisitor {
 
+    private List<String> invadeMethodName;
 
-    public static void testMethod(String className) {
-        System.out.println("testMethod **** = " + className);
-    }
-
-
-    public AdviceWeaver(ClassVisitor cv) {
+    public AdviceWeaver(ClassVisitor cv, List<String> invadeMethodName) {
         super(Opcodes.ASM5, cv);
+        this.invadeMethodName = invadeMethodName;
     }
-
 
     @Override
     public MethodVisitor visitMethod(final int access,
@@ -42,15 +39,6 @@ public class AdviceWeaver extends ClassVisitor {
         return new CustomAdviceAdapter(Opcodes.ASM5, new JSRInlinerAdapter(mv, access, name, desc, signature, exceptions), access, name, desc);
     }
 
-//    @Override
-//    public void visitEnd() {
-//        FieldVisitor fv = cv.visitField(Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC, "timer", "J", null, null);
-//        if (fv != null) {
-//            fv.visitEnd();
-//        }
-//        cv.visitEnd();
-//    }
-
     /**
      * 忽略方法
      *
@@ -62,6 +50,6 @@ public class AdviceWeaver extends ClassVisitor {
      */
     private boolean isIgnore(MethodVisitor mv, int access, String methodName, String descriptor) {
         return null == mv
-                || !methodName.equals("sayHello");
+                || !invadeMethodName.contains(methodName);
     }
 }
