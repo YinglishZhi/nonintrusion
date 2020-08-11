@@ -23,7 +23,7 @@ public class CustomAdviceAdapter extends AdviceAdapter {
     private final Type ASM_TYPE_METHOD = Type.getType(java.lang.reflect.Method.class);
     private final Type ASM_TYPE_STRING = Type.getType(String.class);
     private final Method ASM_METHOD_METHOD_INVOKE = Method.getMethod("Object invoke(Object,Object[])");
-    private final Type ASM_TYPE_THROWABLE = Type.getType(Throwable.class);
+    private final Type ASM_TYPE_THROWABLE = Type.getType(Exception.class);
 
     // -- Lebel for try...catch block
     private final Label beginLabel = new Label();
@@ -32,13 +32,13 @@ public class CustomAdviceAdapter extends AdviceAdapter {
     @Override
     protected void onMethodEnter() {
 //        mark(beginLabel);
-        final StringBuilder append = new StringBuilder();
-        _debug(append, "debug:onMethodEnter()");
-
-        // 加载 before 方法
+//        final StringBuilder append = new StringBuilder();
+//        _debug(append, "debug:onMethodEnter()");
+//
+//        // 加载 before 方法
 //        getStatic(ASM_TYPE_SPY, "TEST_METHOD", ASM_TYPE_METHOD);
-        _debug(append, "loadAdviceMethod()");
-
+//        _debug(append, "loadAdviceMethod()");
+//
 //        mv.visitVarInsn(ASTORE, 1);
 //        mv.visitVarInsn(ALOAD, 1);
 //        mv.visitInsn(ACONST_NULL);
@@ -48,9 +48,9 @@ public class CustomAdviceAdapter extends AdviceAdapter {
 //        mv.visitInsn(ICONST_0);
 //        mv.visitLdcInsn("comm");
 //        mv.visitInsn(AASTORE);
-
-        _debug(append, "loadArrayForBefore()");
-
+//
+//        _debug(append, "loadArrayForBefore()");
+//
 //        invokeVirtual(ASM_TYPE_METHOD, ASM_METHOD_METHOD_INVOKE);
 //        pop();
 //        _debug(append, "invokeVirtual()");
@@ -70,14 +70,14 @@ public class CustomAdviceAdapter extends AdviceAdapter {
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-        System.out.println("visitMethodInsn opcode");
-//        _debug(new StringBuilder(), "debug:visitMethodInsn()");
+//        System.out.println("visitMethodInsn opcode");
+        _debug(new StringBuilder(), "debug:visitMethodInsn()");
         super.visitMethodInsn(opcode, owner, name, desc, itf);
     }
 
     @Override
     public void visitInsn(int opcode) {
-//        _debug(new StringBuilder(), "debug:visitInsn()");
+        _debug(new StringBuilder(), "debug:visitInsn()");
         super.visitInsn(opcode);
     }
 
@@ -89,13 +89,13 @@ public class CustomAdviceAdapter extends AdviceAdapter {
 
     @Override
     public void visitLineNumber(int line, Label start) {
-//        _debug(new StringBuilder(), "debug:visitLineNumber()");
+        _debug(new StringBuilder(), "debug:visitLineNumber()");
         super.visitLineNumber(line, start);
     }
 
     @Override
     public void visitEnd() {
-//        _debug(new StringBuilder(), "debug:visitEnd()");
+        _debug(new StringBuilder(), "debug:visitEnd()");
 //        mv.visitInsn(ICONST_0);
 //        mv.visitInsn(IRETURN);
         super.visitEnd();
