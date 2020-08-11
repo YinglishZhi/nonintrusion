@@ -1,7 +1,5 @@
 package com.yinglishzhi;
 
-import java.lang.reflect.Method;
-
 /**
  * @author LDZ
  * @date 2020/8/6 8:20 下午
@@ -11,13 +9,6 @@ public class MyProgram {
     }
 
     public static void main(String[] args) {
-        Method method = null;
-        try {
-            method = MyInvade.class.getMethod("catLogReport", String.class);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        Heck.init(method);
 
         sayHello();
         sayHello2("hello world222222222");

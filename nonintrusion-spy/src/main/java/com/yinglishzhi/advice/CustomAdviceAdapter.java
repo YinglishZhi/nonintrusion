@@ -60,7 +60,42 @@ public class CustomAdviceAdapter extends AdviceAdapter {
 
         final StringBuilder append = new StringBuilder();
         _debug(append, "debug:onMethodEnter()");
-
+        Label l0 = new Label();
+        Label l1 = new Label();
+        Label l2 = new Label();
+        mv.visitTryCatchBlock(l0, l1, l2, "java/lang/NoSuchMethodException");
+        mv.visitLabel(l0);
+        mv.visitLineNumber(16, l0);
+        mv.visitLdcInsn(Type.getType("Lcom/yinglishzhi/MyInvade;"));
+        mv.visitLdcInsn("catLogReport");
+        mv.visitInsn(ICONST_1);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
+        mv.visitInsn(DUP);
+        mv.visitInsn(ICONST_0);
+        mv.visitLdcInsn(Type.getType("Ljava/lang/String;"));
+        mv.visitInsn(AASTORE);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getMethod", "(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;", false);
+        mv.visitVarInsn(ASTORE, 1);
+        Label l3 = new Label();
+        mv.visitLabel(l3);
+        mv.visitLineNumber(17, l3);
+        mv.visitVarInsn(ALOAD, 1);
+        mv.visitMethodInsn(INVOKESTATIC, "com/yinglishzhi/Heck", "init", "(Ljava/lang/reflect/Method;)V", false);
+        mv.visitLabel(l1);
+        mv.visitLineNumber(20, l1);
+        Label l4 = new Label();
+        mv.visitJumpInsn(GOTO, l4);
+        mv.visitLabel(l2);
+        mv.visitLineNumber(18, l2);
+        mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{"java/lang/NoSuchMethodException"});
+        mv.visitVarInsn(ASTORE, 1);
+        Label l5 = new Label();
+        mv.visitLabel(l5);
+        mv.visitLineNumber(19, l5);
+        mv.visitVarInsn(ALOAD, 1);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/NoSuchMethodException", "printStackTrace", "()V", false);
+        mv.visitLabel(l4);
+        mv.visitLineNumber(22, l4);
         // 加载 before 方法
         getStatic(ASM_TYPE_SPY, "TEST_METHOD", ASM_TYPE_METHOD);
         _debug(append, "loadAdviceMethod()");

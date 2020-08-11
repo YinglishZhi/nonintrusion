@@ -15,19 +15,18 @@ public class SpyCore {
     private final Instrumentation instrumentation;
     private static volatile SpyCore spyCore;
 
+
     private SpyCore(Instrumentation inst) {
         this.instrumentation = inst;
         printClasses(inst);
     }
 
     private static void printClasses(Instrumentation inst) {
-        Class[] allLoadedClasses = inst.getAllLoadedClasses();
+        Class<?>[] allLoadedClasses = inst.getAllLoadedClasses();
         System.out.println(allLoadedClasses.length + "哈哈");
     }
 
     public void invade() {
-
-
         System.out.println("============ 执行 侵入 方法 ============");
         Instrumentation inst = spyCore.instrumentation;
         inst.addTransformer(new CustomTransformer());
