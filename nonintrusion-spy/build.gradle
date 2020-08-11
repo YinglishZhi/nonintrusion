@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
-
 group 'com.yinglishzhi'
 version '1.0-SNAPSHOT'
 
@@ -13,7 +12,7 @@ repositories {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
-    compile group: 'javassist', name: 'javassist', version: '3.3'
+    compile project(':nonintrusion-util')
     compile group: 'org.ow2.asm', name: 'asm', 'version': '7.2'
     compile group: 'org.ow2.asm', name: 'asm-commons', version: '6.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'

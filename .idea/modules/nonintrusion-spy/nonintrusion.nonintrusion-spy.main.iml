@@ -12,5 +12,7 @@
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm:7.2" level="project" />
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm-commons:6.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.7" level="project" />
+    <orderEntry type="module" module-name="nonintrusion.nonintrusion-core.main" />
+    <orderEntry type="module" module-name="nonintrusion.nonintrusion-util.main" />
   </component>
 </module>

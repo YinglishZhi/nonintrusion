@@ -4,4 +4,5 @@ include 'nonintrusion-agent'
 include 'nonintrusion-spy'
 include 'nonintrusion-test'
 include 'nonintrusion-core'
+include 'nonintrusion-util'
 

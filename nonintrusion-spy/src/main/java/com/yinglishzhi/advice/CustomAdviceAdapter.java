@@ -20,20 +20,36 @@ public class CustomAdviceAdapter extends AdviceAdapter {
         super(api, methodVisitor, access, name, desc);
     }
 
+    /**
+     * 黑客类
+     */
     private final Type ASM_TYPE_SPY = Type.getType("Lcom/yinglishzhi/Heck;");
-    private final Type ASM_TYPE_METHOD = Type.getType(java.lang.reflect.Method.class);
-    private final Type ASM_TYPE_STRING = Type.getType(String.class);
-    private final Method ASM_METHOD_METHOD_INVOKE = Method.getMethod("Object invoke(Object,Object[])");
-    private final Type ASM_TYPE_THROWABLE = Type.getType(Exception.class);
 
-    // -- Lebel for try...catch block
-    private Label from = new Label(),
-            to = new Label(),
-            target = new Label();
+    /**
+     * 反射执行
+     */
+    private final Type ASM_TYPE_METHOD = Type.getType(java.lang.reflect.Method.class);
+
+    /**
+     * String type
+     */
+    private final Type ASM_TYPE_STRING = Type.getType(String.class);
+
+    /**
+     * 反射方法
+     */
+    private final Method ASM_METHOD_METHOD_INVOKE = Method.getMethod("Object invoke(Object,Object[])");
+
+    /**
+     * Lebel for try...catch block
+     */
+    private final Label from = new Label();
+    private final Label to = new Label();
+    private final Label target = new Label();
 
     @Override
     protected void onMethodEnter() {
-
+        // 标志 try 开始的地方
         visitLabel(from);
         visitTryCatchBlock(
                 from,
@@ -42,7 +58,6 @@ public class CustomAdviceAdapter extends AdviceAdapter {
                 "java/lang/Exception"
         );
 
-
         final StringBuilder append = new StringBuilder();
         _debug(append, "debug:onMethodEnter()");
 
@@ -50,6 +65,7 @@ public class CustomAdviceAdapter extends AdviceAdapter {
         getStatic(ASM_TYPE_SPY, "TEST_METHOD", ASM_TYPE_METHOD);
         _debug(append, "loadAdviceMethod()");
 
+        // 反射调用 黑客类方法
         mv.visitVarInsn(ASTORE, 1);
         mv.visitVarInsn(ALOAD, 1);
         mv.visitInsn(ACONST_NULL);

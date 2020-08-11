@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/nonintrusion-core" />
             <option value="$PROJECT_DIR$/nonintrusion-spy" />
             <option value="$PROJECT_DIR$/nonintrusion-test" />
+            <option value="$PROJECT_DIR$/nonintrusion-util" />
           </set>
         </option>
         <option name="useQualifiedModuleNames" value="true" />

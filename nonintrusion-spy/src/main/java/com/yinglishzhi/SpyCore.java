@@ -12,7 +12,6 @@ import java.lang.instrument.Instrumentation;
  */
 public class SpyCore {
 
-
     private final Instrumentation instrumentation;
     private static volatile SpyCore spyCore;
 
@@ -27,7 +26,9 @@ public class SpyCore {
     }
 
     public void invade() {
-        System.out.println("执行 侵入 方法");
+
+
+        System.out.println("============ 执行 侵入 方法 ============");
         Instrumentation inst = spyCore.instrumentation;
         inst.addTransformer(new CustomTransformer());
         System.out.println("=========");
