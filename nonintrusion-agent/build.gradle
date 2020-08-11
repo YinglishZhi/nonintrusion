@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group 'com.yinglishzhi'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.4'
+
+    annotationProcessor "org.projectlombok:lombok:1.18.4"
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    manifest {
+        attributes 'Premain-Class': 'com.yinglishzhi.AgentLauncher'
+        attributes 'Agent-Class': 'com.yinglishzhi.AgentLauncher'
+    }
+}
+
