@@ -27,6 +27,7 @@ public class AgentLauncher {
         main(args, inst);
     }
 
+
     private static synchronized void main(String args, final Instrumentation inst) {
         try {
 

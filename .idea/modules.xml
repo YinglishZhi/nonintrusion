@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion.main.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-agent/nonintrusion.nonintrusion-agent.main.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-agent/nonintrusion.nonintrusion-agent.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-agent/nonintrusion.nonintrusion-agent.test.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-agent/nonintrusion.nonintrusion-agent.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-asm/nonintrusion.nonintrusion-asm.main.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-asm/nonintrusion.nonintrusion-asm.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-asm/nonintrusion.nonintrusion-asm.test.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-asm/nonintrusion.nonintrusion-asm.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-core/nonintrusion.nonintrusion-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-core/nonintrusion.nonintrusion-core.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-core/nonintrusion.nonintrusion-core.test.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-core/nonintrusion.nonintrusion-core.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-spy/nonintrusion.nonintrusion-spy.main.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-spy/nonintrusion.nonintrusion-spy.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-spy/nonintrusion.nonintrusion-spy.test.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-spy/nonintrusion.nonintrusion-spy.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-test/nonintrusion.nonintrusion-test.main.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-test/nonintrusion.nonintrusion-test.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion-test/nonintrusion.nonintrusion-test.test.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion-test/nonintrusion.nonintrusion-test.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nonintrusion.test.iml" filepath="$PROJECT_DIR$/.idea/modules/nonintrusion.test.iml" />
+    </modules>
+  </component>
+</project>

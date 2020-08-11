@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../../nonintrusion-test/out/production/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../nonintrusion-test/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../nonintrusion-test/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../nonintrusion-test/src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: javassist:javassist:3.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-commons:6.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm:7.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.7" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-tree:6.0" level="project" />
+  </component>
+</module>

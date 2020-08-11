@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
 group 'com.yinglishzhi'
@@ -8,6 +9,7 @@ version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.4'
