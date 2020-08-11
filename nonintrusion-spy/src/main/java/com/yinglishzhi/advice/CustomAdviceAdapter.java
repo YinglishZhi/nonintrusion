@@ -3,6 +3,7 @@ package com.yinglishzhi.advice;
 import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.AdviceAdapter;
 import org.objectweb.asm.commons.Method;
@@ -26,34 +27,44 @@ public class CustomAdviceAdapter extends AdviceAdapter {
     private final Type ASM_TYPE_THROWABLE = Type.getType(Exception.class);
 
     // -- Lebel for try...catch block
-    private final Label beginLabel = new Label();
-    private final Label endLabel = new Label();
+    private Label from = new Label(),
+            to = new Label(),
+            target = new Label();
 
     @Override
     protected void onMethodEnter() {
-//        mark(beginLabel);
-//        final StringBuilder append = new StringBuilder();
-//        _debug(append, "debug:onMethodEnter()");
-//
-//        // 加载 before 方法
-//        getStatic(ASM_TYPE_SPY, "TEST_METHOD", ASM_TYPE_METHOD);
-//        _debug(append, "loadAdviceMethod()");
-//
-//        mv.visitVarInsn(ASTORE, 1);
-//        mv.visitVarInsn(ALOAD, 1);
-//        mv.visitInsn(ACONST_NULL);
-//        mv.visitInsn(ICONST_1);
-//        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
-//        mv.visitInsn(DUP);
-//        mv.visitInsn(ICONST_0);
-//        mv.visitLdcInsn("comm");
-//        mv.visitInsn(AASTORE);
-//
-//        _debug(append, "loadArrayForBefore()");
-//
-//        invokeVirtual(ASM_TYPE_METHOD, ASM_METHOD_METHOD_INVOKE);
-//        pop();
-//        _debug(append, "invokeVirtual()");
+
+        visitLabel(from);
+        visitTryCatchBlock(
+                from,
+                to,
+                target,
+                "java/lang/Exception"
+        );
+
+
+        final StringBuilder append = new StringBuilder();
+        _debug(append, "debug:onMethodEnter()");
+
+        // 加载 before 方法
+        getStatic(ASM_TYPE_SPY, "TEST_METHOD", ASM_TYPE_METHOD);
+        _debug(append, "loadAdviceMethod()");
+
+        mv.visitVarInsn(ASTORE, 1);
+        mv.visitVarInsn(ALOAD, 1);
+        mv.visitInsn(ACONST_NULL);
+        mv.visitInsn(ICONST_1);
+        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+        mv.visitInsn(DUP);
+        mv.visitInsn(ICONST_0);
+        mv.visitLdcInsn("comm");
+        mv.visitInsn(AASTORE);
+
+        _debug(append, "loadArrayForBefore()");
+
+        invokeVirtual(ASM_TYPE_METHOD, ASM_METHOD_METHOD_INVOKE);
+        pop();
+        _debug(append, "invokeVirtual()");
     }
 
     @Override
@@ -63,14 +74,25 @@ public class CustomAdviceAdapter extends AdviceAdapter {
 
     @Override
     public void visitMaxs(int maxStack, int maxLocals) {
-//        mark(endLabel);
-//        visitTryCatchBlock(beginLabel, endLabel, mark(), ASM_TYPE_THROWABLE.getInternalName());
+        // 标志 try 结束
+        mv.visitLabel(to);
+
+        // 标志 catch 块开始
+        mv.visitLabel(target);
+        mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{"java/lang/Exception"});
+
+        // 异常信息保存到局部变量
+        int local = newLocal(Type.LONG_TYPE);
+        mv.visitVarInsn(ASTORE, local);
+
+        // 抛出异常
+        mv.visitVarInsn(ALOAD, local);
+        mv.visitInsn(ATHROW);
         super.visitMaxs(maxStack, maxLocals);
     }
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-//        System.out.println("visitMethodInsn opcode");
         _debug(new StringBuilder(), "debug:visitMethodInsn()");
         super.visitMethodInsn(opcode, owner, name, desc, itf);
     }
@@ -96,8 +118,6 @@ public class CustomAdviceAdapter extends AdviceAdapter {
     @Override
     public void visitEnd() {
         _debug(new StringBuilder(), "debug:visitEnd()");
-//        mv.visitInsn(ICONST_0);
-//        mv.visitInsn(IRETURN);
         super.visitEnd();
     }
 
