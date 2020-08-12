@@ -37,8 +37,11 @@ public class CustomAdviceAdapter extends AdviceAdapter {
     @Override
     protected void onMethodEnter() {
         // 标志 try 开始的地方
-        visitLabel(from);
-        visitTryCatchBlock(from, to, target, ASM_TYPE_EXCEPTION.getInternalName());
+        Label l0 = new Label();
+        Label l1 = new Label();
+        Label l2 = new Label();
+        mv.visitTryCatchBlock(l0, l1, l2, ASM_TYPE_EXCEPTION.getInternalName());
+        mv.visitLabel(l0);
 
         final StringBuilder append = new StringBuilder();
         // debug method enter
@@ -57,6 +60,17 @@ public class CustomAdviceAdapter extends AdviceAdapter {
         invokeVirtual(ASM_TYPE_METHOD, ASM_METHOD_METHOD_INVOKE);
         pop();
         _debug(append, "invokeVirtual()");
+        mv.visitLabel(l1);
+        Label l4 = new Label();
+        mv.visitJumpInsn(GOTO, l4);
+        mv.visitLabel(l2);
+        mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{ASM_TYPE_EXCEPTION.getInternalName()});
+        mv.visitVarInsn(ASTORE, 1);
+        Label l5 = new Label();
+        mv.visitLabel(l5);
+        mv.visitVarInsn(ALOAD, 1);
+        mv.visitMethodInsn(INVOKEVIRTUAL, ASM_TYPE_EXCEPTION.getInternalName(), PRINT_STACK_TRACE, generateDescriptor(void.class), false);
+        mv.visitLabel(l4);
     }
 
     /**
@@ -86,33 +100,21 @@ public class CustomAdviceAdapter extends AdviceAdapter {
 
     @Override
     public void visitMaxs(int maxStack, int maxLocals) {
-        // 标志 try 结束
-        mv.visitLabel(to);
-
-        // 标志 catch 块开始
-        mv.visitLabel(target);
-        mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{ASM_TYPE_EXCEPTION.getInternalName()});
-
-        // 异常信息保存到局部变量
-        int local = newLocal(Type.LONG_TYPE);
-        mv.visitVarInsn(ASTORE, local);
-
-        // 抛出异常
-        mv.visitVarInsn(ALOAD, local);
-        mv.visitInsn(ATHROW);
+//        // 标志 try 结束
+//        mv.visitLabel(to);
+//
+//        // 标志 catch 块开始
+//        mv.visitLabel(target);
+//        mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{ASM_TYPE_EXCEPTION.getInternalName()});
+//
+//        // 异常信息保存到局部变量
+//        int local = newLocal(Type.LONG_TYPE);
+//        mv.visitVarInsn(ASTORE, local);
+//
+//        // 抛出异常
+//        mv.visitVarInsn(ALOAD, local);
+//        mv.visitInsn(ATHROW);
         super.visitMaxs(maxStack, maxLocals);
-    }
-
-    @Override
-    public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        _debug(new StringBuilder(), "debug:visitTryCatchBlock()");
-        super.visitTryCatchBlock(start, end, handler, type);
-    }
-
-    @Override
-    public void catchException(Label start, Label end, Type exception) {
-        _debug(new StringBuilder(), "debug:catchException()");
-        super.catchException(start, end, exception);
     }
 
     @Override
@@ -129,7 +131,6 @@ public class CustomAdviceAdapter extends AdviceAdapter {
 
     @Override
     public void visitParameter(String name, int access) {
-        System.out.println("visitParameter name = " + name + "access = " + access);
         super.visitParameter(name, access);
     }
 
