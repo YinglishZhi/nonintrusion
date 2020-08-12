@@ -66,7 +66,7 @@ public class CustomTransformer implements ClassFileTransformer {
      * @param bytes 字节流
      */
     private static void printClass(byte[] bytes) {
-        File file = new File("/Users/mtdp/util/log/test.class");
+        File file = new File("/Users/zhiyinglish/logs/test_noninstrusion/test.class");
         FileOutputStream fout = null;
         try {
             fout = new FileOutputStream(file);

@@ -1,12 +1,13 @@
 package com.yinglishzhi.advice;
 
 import org.apache.commons.lang3.StringUtils;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
+import org.objectweb.asm.*;
 import org.objectweb.asm.commons.AdviceAdapter;
 import org.objectweb.asm.commons.Method;
+
+import static com.yinglishzhi.asm.AsmCodeCreator.generateHeckInit;
+import static com.yinglishzhi.commons.Constant.*;
+
 
 /**
  * 自定义 method visitor
@@ -20,28 +21,14 @@ public class CustomAdviceAdapter extends AdviceAdapter {
         super(api, methodVisitor, access, name, desc);
     }
 
-    /**
-     * 黑客类
-     */
-    private final Type ASM_TYPE_SPY = Type.getType("Lcom/yinglishzhi/Heck;");
-
-    /**
-     * 反射执行
-     */
-    private final Type ASM_TYPE_METHOD = Type.getType(java.lang.reflect.Method.class);
-
-    /**
-     * String type
-     */
-    private final Type ASM_TYPE_STRING = Type.getType(String.class);
 
     /**
      * 反射方法
      */
-    private final Method ASM_METHOD_METHOD_INVOKE = Method.getMethod("Object invoke(Object,Object[])");
+    private static final Method ASM_METHOD_METHOD_INVOKE = Method.getMethod("Object invoke(Object,Object[])");
 
     /**
-     * Lebel for try...catch block
+     * Label for try...catch block
      */
     private final Label from = new Label();
     private final Label to = new Label();
@@ -51,71 +38,45 @@ public class CustomAdviceAdapter extends AdviceAdapter {
     protected void onMethodEnter() {
         // 标志 try 开始的地方
         visitLabel(from);
-        visitTryCatchBlock(
-                from,
-                to,
-                target,
-                "java/lang/Exception"
-        );
+        visitTryCatchBlock(from, to, target, ASM_TYPE_EXCEPTION.getInternalName());
 
         final StringBuilder append = new StringBuilder();
+        // debug method enter
         _debug(append, "debug:onMethodEnter()");
-        Label l0 = new Label();
-        Label l1 = new Label();
-        Label l2 = new Label();
-        mv.visitTryCatchBlock(l0, l1, l2, "java/lang/NoSuchMethodException");
-        mv.visitLabel(l0);
-        mv.visitLineNumber(16, l0);
-        mv.visitLdcInsn(Type.getType("Lcom/yinglishzhi/MyInvade;"));
-        mv.visitLdcInsn("catLogReport");
-        mv.visitInsn(ICONST_1);
-        mv.visitTypeInsn(ANEWARRAY, "java/lang/Class");
-        mv.visitInsn(DUP);
-        mv.visitInsn(ICONST_0);
-        mv.visitLdcInsn(Type.getType("Ljava/lang/String;"));
-        mv.visitInsn(AASTORE);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Class", "getMethod", "(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;", false);
-        mv.visitVarInsn(ASTORE, 1);
-        Label l3 = new Label();
-        mv.visitLabel(l3);
-        mv.visitLineNumber(17, l3);
-        mv.visitVarInsn(ALOAD, 1);
-        mv.visitMethodInsn(INVOKESTATIC, "com/yinglishzhi/Heck", "init", "(Ljava/lang/reflect/Method;)V", false);
-        mv.visitLabel(l1);
-        mv.visitLineNumber(20, l1);
-        Label l4 = new Label();
-        mv.visitJumpInsn(GOTO, l4);
-        mv.visitLabel(l2);
-        mv.visitLineNumber(18, l2);
-        mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{"java/lang/NoSuchMethodException"});
-        mv.visitVarInsn(ASTORE, 1);
-        Label l5 = new Label();
-        mv.visitLabel(l5);
-        mv.visitLineNumber(19, l5);
-        mv.visitVarInsn(ALOAD, 1);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/NoSuchMethodException", "printStackTrace", "()V", false);
-        mv.visitLabel(l4);
-        mv.visitLineNumber(22, l4);
+        generateHeckInit(mv);
+
         // 加载 before 方法
-        getStatic(ASM_TYPE_SPY, "TEST_METHOD", ASM_TYPE_METHOD);
+        getStatic(ASM_TYPE_HECK, "TEST_METHOD", ASM_TYPE_METHOD);
         _debug(append, "loadAdviceMethod()");
 
         // 反射调用 黑客类方法
-        mv.visitVarInsn(ASTORE, 1);
-        mv.visitVarInsn(ALOAD, 1);
-        mv.visitInsn(ACONST_NULL);
-        mv.visitInsn(ICONST_1);
-        mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
-        mv.visitInsn(DUP);
-        mv.visitInsn(ICONST_0);
-        mv.visitLdcInsn("comm");
-        mv.visitInsn(AASTORE);
-
+        loadArrayForBefore("comm");
         _debug(append, "loadArrayForBefore()");
 
+        // 调用方法
         invokeVirtual(ASM_TYPE_METHOD, ASM_METHOD_METHOD_INVOKE);
         pop();
         _debug(append, "invokeVirtual()");
+    }
+
+    /**
+     * 加载 before 通知参数数组
+     *
+     * @param string 参数
+     */
+    private void loadArrayForBefore(String string) {
+        mv.visitVarInsn(ASTORE, 1);
+        mv.visitVarInsn(ALOAD, 1);
+        mv.visitInsn(ACONST_NULL);
+
+        push(1);
+        newArray(ASM_TYPE_OBJECT);
+
+        dup();
+        push(0);
+        push(string);
+        arrayStore(ASM_TYPE_STRING);
+
     }
 
     @Override
@@ -130,7 +91,7 @@ public class CustomAdviceAdapter extends AdviceAdapter {
 
         // 标志 catch 块开始
         mv.visitLabel(target);
-        mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{"java/lang/Exception"});
+        mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{ASM_TYPE_EXCEPTION.getInternalName()});
 
         // 异常信息保存到局部变量
         int local = newLocal(Type.LONG_TYPE);
@@ -143,8 +104,20 @@ public class CustomAdviceAdapter extends AdviceAdapter {
     }
 
     @Override
+    public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
+        _debug(new StringBuilder(), "debug:visitTryCatchBlock()");
+        super.visitTryCatchBlock(start, end, handler, type);
+    }
+
+    @Override
+    public void catchException(Label start, Label end, Type exception) {
+        _debug(new StringBuilder(), "debug:catchException()");
+        super.catchException(start, end, exception);
+    }
+
+    @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-        _debug(new StringBuilder(), "debug:visitMethodInsn()");
+        _debug(new StringBuilder(), "debug:visitMethodInsn()" + opcode);
         super.visitMethodInsn(opcode, owner, name, desc, itf);
     }
 
