@@ -1,4 +1,6 @@
-package com.yinglishzhi;
+package com.yinglishzhi.intrusion;
+
+import static java.lang.System.out;
 
 /**
  * @author LDZ
@@ -7,6 +9,6 @@ package com.yinglishzhi;
 public class MyInvade {
 
     public static void catLogReport(String str) {
-        System.out.println(str);
+        out.println(str);
     }
 }
