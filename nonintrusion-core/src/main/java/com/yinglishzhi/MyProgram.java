@@ -9,17 +9,15 @@ public class MyProgram {
     }
 
     public static void main(String[] args) {
-
         sayHello();
         sayHello2("hello world222222222");
-        sayHello();
     }
 
     public static void sayHello() {
         try {
             Thread.sleep(2000);
-            System.out.println("hello world!!");
-        } catch (InterruptedException e) {
+            throw new RuntimeException("NPE");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

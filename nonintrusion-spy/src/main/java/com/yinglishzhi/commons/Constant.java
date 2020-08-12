@@ -25,6 +25,7 @@ public class Constant {
      * exception type
      */
     public static final Type ASM_TYPE_OBJECT = Type.getType(Object.class);
+    public static final Type ASM_TYPE_THROWABLE = Type.getType(Throwable.class);
 
     /**
      * no such method exception type

@@ -18,35 +18,6 @@ import static org.objectweb.asm.Opcodes.*;
  */
 public class AsmCodeCreator {
 
-//    private static final Label l0 = new Label();
-//    private static final Label l1 = new Label();
-//    private static final Label l2 = new Label();
-//
-//    public static void generateTryCatchBegin(MethodVisitor mv) {
-//        mv.visitTryCatchBlock(l0, l1, l2, ASM_TYPE_EXCEPTION.getInternalName());
-//        mv.visitLabel(l0);
-//    }
-//
-//
-//    public static void generateTryCatchEnd(MethodVisitor mv) {
-//        try {
-//            mv.visitLabel(l0);
-//            Label l4 = new Label();
-//            mv.visitJumpInsn(GOTO, l4);
-//            mv.visitLabel(l1);
-//            mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[]{ASM_TYPE_NO_SUCH_METHOD_EXCEPTION.getInternalName()});
-//            mv.visitVarInsn(ASTORE, 1);
-//            Label l5 = new Label();
-//            mv.visitLabel(l5);
-//            mv.visitVarInsn(ALOAD, 1);
-//            mv.visitMethodInsn(INVOKEVIRTUAL, ASM_TYPE_NO_SUCH_METHOD_EXCEPTION.getInternalName(), PRINT_STACK_TRACE, generateDescriptor(void.class), false);
-//            mv.visitLabel(l4);
-//        } catch (Exception e) {
-//            System.err.println(e.getMessage());
-//        }
-//    }
-
-
     /**
      * 生成 Heck init 代码
      *
