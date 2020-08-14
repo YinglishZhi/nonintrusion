@@ -16,16 +16,9 @@ import org.objectweb.asm.commons.JSRInlinerAdapter;
  */
 public class AdviceWeaver extends ClassVisitor {
 
-
-    public static void testMethod(String className) {
-        System.out.println("testMethod **** = " + className);
-    }
-
-
     public AdviceWeaver(ClassVisitor cv) {
         super(Opcodes.ASM5, cv);
     }
-
 
     @Override
     public MethodVisitor visitMethod(final int access,
@@ -42,14 +35,10 @@ public class AdviceWeaver extends ClassVisitor {
         return new CustomAdviceAdapter(Opcodes.ASM5, new JSRInlinerAdapter(mv, access, name, desc, signature, exceptions), access, name, desc);
     }
 
-//    @Override
-//    public void visitEnd() {
-//        FieldVisitor fv = cv.visitField(Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC, "timer", "J", null, null);
-//        if (fv != null) {
-//            fv.visitEnd();
-//        }
-//        cv.visitEnd();
-//    }
+    @Override
+    public void visitEnd() {
+        cv.visitEnd();
+    }
 
     /**
      * 忽略方法
